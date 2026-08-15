@@ -1,0 +1,348 @@
+.products-page {
+  min-height: 100vh;
+  padding: 35px 42px;
+  background: #f4f6ff;
+  box-sizing: border-box;
+}
+
+/* =========================
+   PAGE HEADER
+========================= */
+
+.products-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 28px;
+}
+
+.products-header h1 {
+  margin: 0;
+  color: #171a2b;
+  font-size: 34px;
+  font-weight: 750;
+}
+
+.products-header p {
+  margin-top: 7px;
+  color: #7b8194;
+  font-size: 14px;
+}
+
+/* =========================
+   ADD PRODUCT
+========================= */
+
+.add-product-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: linear-gradient(135deg, #6366f1, #7c3aed);
+  color: white;
+  padding: 13px 21px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(99, 102, 241, 0.25);
+  transition: all 0.25s ease;
+}
+
+.add-product-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 25px rgba(99, 102, 241, 0.35);
+}
+
+/* =========================
+   SEARCH
+========================= */
+
+.search-box {
+  margin-bottom: 22px;
+}
+
+.search-box input {
+  width: 100%;
+  max-width: 450px;
+  padding: 14px 17px;
+  border: 1px solid #dfe3f0;
+  border-radius: 13px;
+  background: white;
+  color: #25293a;
+  font-size: 14px;
+  outline: none;
+  box-shadow: 0 6px 20px rgba(35, 42, 70, 0.05);
+  transition: all 0.2s ease;
+}
+
+.search-box input::placeholder {
+  color: #9aa0b1;
+}
+
+.search-box input:focus {
+  border-color: #6366f1;
+  box-shadow:
+    0 0 0 4px rgba(99, 102, 241, 0.1),
+    0 7px 22px rgba(35, 42, 70, 0.06);
+}
+
+/* =========================
+   TABLE
+========================= */
+
+.products-table-container {
+  overflow-x: auto;
+  background: white;
+  border-radius: 20px;
+  border: 1px solid #e9ebf5;
+  box-shadow: 0 10px 30px rgba(35, 42, 70, 0.07);
+}
+
+.products-table-container table {
+  width: 100%;
+  min-width: 900px;
+  border-collapse: collapse;
+}
+
+.products-table-container th,
+.products-table-container td {
+  padding: 17px 18px;
+  text-align: left;
+  border-bottom: 1px solid #eef0f6;
+}
+
+.products-table-container th {
+  background: #fafaff;
+  color: #6d7386;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+}
+
+.products-table-container td {
+  color: #454b5f;
+  font-size: 14px;
+  background: white;
+}
+
+.products-table-container tbody tr {
+  transition: all 0.2s ease;
+}
+
+.products-table-container tbody tr:hover td {
+  background: #fafaff;
+}
+
+/* Product ID */
+
+.products-table-container td:first-child {
+  color: #6366f1;
+  font-weight: 700;
+}
+
+/* Product Name */
+
+.products-table-container td:nth-child(2) {
+  color: #25293a;
+  font-weight: 650;
+}
+
+/* Price */
+
+.products-table-container td:nth-child(5) {
+  color: #6366f1;
+  font-weight: 700;
+}
+
+/* =========================
+   QUANTITY BADGE
+========================= */
+
+.products-table-container td:nth-child(4) {
+  font-weight: 700;
+}
+
+.products-table-container td:nth-child(4) {
+  color: #15803d;
+}
+
+/* =========================
+   ACTION BUTTONS
+========================= */
+
+.edit-btn,
+.delete-btn {
+  border: none;
+  padding: 8px 14px;
+  border-radius: 9px;
+  font-size: 12px;
+  font-weight: 650;
+  cursor: pointer;
+  margin-right: 7px;
+  transition: all 0.2s ease;
+}
+
+.edit-btn {
+  background: #eef2ff;
+  color: #4f46e5;
+}
+
+.edit-btn:hover {
+  background: #e0e7ff;
+  transform: translateY(-1px);
+}
+
+.delete-btn {
+  background: #fff1f2;
+  color: #e11d48;
+}
+
+.delete-btn:hover {
+  background: #ffe4e6;
+  transform: translateY(-1px);
+}
+
+/* =========================
+   LOW STOCK
+========================= */
+
+.low-stock {
+  color: #dc2626 !important;
+  font-weight: 750;
+}
+
+.low-stock-text {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 4px 8px;
+  border-radius: 8px;
+  background: #fff1f2;
+  color: #dc2626;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+/* =========================
+   EDIT MODAL
+========================= */
+
+.edit-form-container {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(17, 24, 39, 0.48);
+  backdrop-filter: blur(5px);
+}
+
+.edit-form-card {
+  width: 100%;
+  max-width: 560px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 30px;
+  border-radius: 22px;
+  background: white;
+  box-shadow: 0 25px 70px rgba(17, 24, 39, 0.2);
+}
+
+.edit-form-card h2 {
+  margin-bottom: 24px;
+  color: #171a2b;
+  font-size: 24px;
+}
+
+.edit-form-card .form-group {
+  margin-bottom: 18px;
+}
+
+.edit-form-card .form-group label {
+  display: block;
+  margin-bottom: 7px;
+  color: #454b60;
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.edit-form-card .form-group input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #dfe3f0;
+  border-radius: 10px;
+  font-size: 14px;
+  outline: none;
+}
+
+.edit-form-card .form-group input:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+.update-btn {
+  border: none;
+  padding: 12px 19px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #6366f1, #7c3aed);
+  color: white;
+  font-size: 13px;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.cancel-btn {
+  border: none;
+  padding: 12px 19px;
+  border-radius: 10px;
+  background: #f1f3f8;
+  color: #4b5563;
+  font-size: 13px;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.update-btn:hover {
+  transform: translateY(-1px);
+}
+
+.cancel-btn:hover {
+  background: #e5e7eb;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 900px) {
+  .products-page {
+    padding: 28px;
+  }
+}
+
+@media (max-width: 650px) {
+  .products-page {
+    padding: 20px;
+  }
+
+  .products-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .add-product-btn {
+    width: 100%;
+  }
+
+  .search-box input {
+    max-width: 100%;
+  }
+
+  .edit-form-card {
+    padding: 24px;
+  }
+}
