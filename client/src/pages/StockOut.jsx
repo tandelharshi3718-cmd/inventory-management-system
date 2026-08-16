@@ -13,7 +13,7 @@ function StockOut() {
 
   // GET PRODUCTS
   useEffect(() => {
-    fetch("http://localhost:3000/api/products")
+    fetch("https://inventory-management-system-1-5pa5.onrender.com/api/products")
       .then((response) => response.json())
       .then((data) => {
         setProducts(data);
@@ -44,7 +44,7 @@ function StockOut() {
 
     try {
       const response = await fetch(
-        `http://localhost:3000/api/products/${selectedProduct}/stock-out`,
+        `https://inventory-management-system-1-5pa5.onrender.com/api/products/${selectedProduct}/stock-out`,
         {
           method: "PUT",
           headers: {

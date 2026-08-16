@@ -12,7 +12,7 @@ function StockIn() {
 
   // GET PRODUCTS
   useEffect(() => {
-    fetch("http://localhost:3000/api/products")
+    fetch("https://inventory-management-system-1-5pa5.onrender.com/api/products")
       .then((response) => response.json())
       .then((data) => {
         setProducts(data);
@@ -38,7 +38,7 @@ function StockIn() {
 
     try {
       const response = await fetch(
-        `http://localhost:3000/api/products/${selectedProduct}/stock-in`,
+        `https://inventory-management-system-1-5pa5.onrender.com/api/products/${selectedProduct}/stock-in`,
         {
           method: "PUT",
           headers: {

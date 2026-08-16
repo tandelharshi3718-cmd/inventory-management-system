@@ -11,13 +11,12 @@ function Reports() {
     const fetchData = async () => {
       try {
         const productsResponse = await fetch(
-          "http://localhost:3000/api/products"
+          "https://inventory-management-system-1-5pa5.onrender.com/api/products"
         );
 
         const transactionsResponse = await fetch(
-          "http://localhost:3000/api/transactions"
+          "https://inventory-management-system-1-5pa5.onrender.com/api/transactions"
         );
-
         const productsData = await productsResponse.json();
         const transactionsData = await transactionsResponse.json();
 

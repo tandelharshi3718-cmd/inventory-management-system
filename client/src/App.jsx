@@ -22,31 +22,31 @@ function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [transactions, setTransactions] = useState([]);
 
-  // Get products from MongoDB
-  useEffect(() => {
-    fetch("http://localhost:3000/api/products")
-      .then((response) => response.json())
-      .then((data) => {
-        setProducts(data);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error("Error fetching products:", error);
-        setLoading(false);
-      });
-  }, []);
+// Get products from MongoDB
+useEffect(() => {
+  fetch("https://inventory-management-system-1-5pa5.onrender.com/api/products")
+    .then((response) => response.json())
+    .then((data) => {
+      setProducts(data);
+      setLoading(false);
+    })
+    .catch((error) => {
+      console.error("Error fetching products:", error);
+      setLoading(false);
+    });
+}, []);
 
-  // Get transactions from MongoDB
-  useEffect(() => {
-    fetch("http://localhost:3000/api/transactions")
-      .then((response) => response.json())
-      .then((data) => {
-        setTransactions(data);
-      })
-      .catch((error) => {
-        console.error("Error fetching transactions:", error);
-      });
-  }, []);
+// Get transactions from MongoDB
+useEffect(() => {
+  fetch("https://inventory-management-system-1-5pa5.onrender.com/api/transactions")
+    .then((response) => response.json())
+    .then((data) => {
+      setTransactions(data);
+    })
+    .catch((error) => {
+      console.error("Error fetching transactions:", error);
+    });
+}, []);
 
   // Statistics
   const totalProducts = products.length;

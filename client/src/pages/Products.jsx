@@ -14,7 +14,7 @@ function Products() {
   const [searchTerm, setSearchTerm] = useState("");
 
   const fetchProducts = () => {
-    fetch("http://localhost:3000/api/products")
+    fetch("https://inventory-management-system-1-5pa5.onrender.com/api/products")
       .then((response) => response.json())
       .then((data) => {
         setProducts(data);
@@ -53,7 +53,7 @@ function Products() {
 
     try {
       const response = await fetch(
-        `http://localhost:3000/api/products/${id}`,
+        `https://inventory-management-system-1-5pa5.onrender.com/api/products/${id}`,
         {
           method: "DELETE",
         }
@@ -84,7 +84,7 @@ function Products() {
 
     try {
       const response = await fetch(
-        `http://localhost:3000/api/products/${editingProduct._id}`,
+       `https://inventory-management-system-1-5pa5.onrender.com/api/products/${editingProduct._id}`,
         {
           method: "PUT",
           headers: {

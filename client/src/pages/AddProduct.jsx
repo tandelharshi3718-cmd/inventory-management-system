@@ -24,7 +24,7 @@ function AddProduct() {
     e.preventDefault();
 
     try {
-      const response = await fetch("http://localhost:3000/api/products", {
+      const response = await fetch("https://inventory-management-system-1-5pa5.onrender.com/api/products", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
