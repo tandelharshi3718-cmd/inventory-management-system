@@ -6,25 +6,48 @@ function Reports() {
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Get products and transactions
+  const API_URL = "https://inventory-management-system-1-5pa5.onrender.com";
+
   useEffect(() => {
     const fetchData = async () => {
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        setLoading(false);
+        return;
+      }
+
       try {
+        const headers = {
+          Authorization: `Bearer ${token}`,
+        };
+
         const productsResponse = await fetch(
-          "https://inventory-management-system-1-5pa5.onrender.com/api/products"
+          `${API_URL}/api/products`,
+          {
+            headers,
+          }
         );
 
         const transactionsResponse = await fetch(
-          "https://inventory-management-system-1-5pa5.onrender.com/api/transactions"
+          `${API_URL}/api/transactions`,
+          {
+            headers,
+          }
         );
+
+        if (!productsResponse.ok || !transactionsResponse.ok) {
+          throw new Error("Failed to fetch report data");
+        }
+
         const productsData = await productsResponse.json();
         const transactionsData = await transactionsResponse.json();
 
         setProducts(productsData);
         setTransactions(transactionsData);
-        setLoading(false);
       } catch (error) {
         console.error("Error fetching report data:", error);
+      } finally {
         setLoading(false);
       }
     };

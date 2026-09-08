@@ -7,15 +7,24 @@ function Products() {
 
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-
   const [editingProduct, setEditingProduct] = useState(null);
-
-  // SEARCH
   const [searchTerm, setSearchTerm] = useState("");
 
+  const API_URL = "https://inventory-management-system-1-5pa5.onrender.com";
+  const token = localStorage.getItem("token");
+
   const fetchProducts = () => {
-    fetch("https://inventory-management-system-1-5pa5.onrender.com/api/products")
-      .then((response) => response.json())
+    fetch(`${API_URL}/api/products`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Failed to fetch products");
+        }
+        return response.json();
+      })
       .then((data) => {
         setProducts(data);
         setLoading(false);
@@ -52,12 +61,12 @@ function Products() {
     }
 
     try {
-      const response = await fetch(
-        `https://inventory-management-system-1-5pa5.onrender.com/api/products/${id}`,
-        {
-          method: "DELETE",
-        }
-      );
+      const response = await fetch(`${API_URL}/api/products/${id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       const data = await response.json();
 
@@ -84,11 +93,12 @@ function Products() {
 
     try {
       const response = await fetch(
-       `https://inventory-management-system-1-5pa5.onrender.com/api/products/${editingProduct._id}`,
+        `${API_URL}/api/products/${editingProduct._id}`,
         {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
             productId: editingProduct.productId,
@@ -96,6 +106,7 @@ function Products() {
             category: editingProduct.category,
             quantity: Number(editingProduct.quantity),
             price: Number(editingProduct.price),
+            supplierId: editingProduct.supplierId?._id || editingProduct.supplierId || "",
           }),
         }
       );
@@ -104,9 +115,7 @@ function Products() {
 
       if (response.ok) {
         alert("Product updated successfully!");
-
         setEditingProduct(null);
-
         fetchProducts();
       } else {
         alert(data.message || "Failed to update product");
@@ -155,6 +164,7 @@ function Products() {
                 <th>Product ID</th>
                 <th>Product Name</th>
                 <th>Category</th>
+                <th>Supplier</th>
                 <th>Quantity</th>
                 <th>Price</th>
                 <th>Actions</th>
@@ -165,16 +175,23 @@ function Products() {
               {filteredProducts.map((product) => (
                 <tr key={product._id}>
                   <td>{product.productId}</td>
-
                   <td>{product.productName}</td>
-
                   <td>{product.category}</td>
+
+                  <td>
+                    {product.supplierId
+                      ? `${product.supplierId.supplierName} - ${product.supplierId.companyName}`
+                      : "No Supplier"}
+                  </td>
 
                   <td className={product.quantity <= 5 ? "low-stock" : ""}>
                     {product.quantity}
 
                     {product.quantity <= 5 && (
-                      <span className="low-stock-text"> ⚠️ Low Stock</span>
+                      <span className="low-stock-text">
+                        {" "}
+                        ⚠️ Low Stock
+                      </span>
                     )}
                   </td>
 

@@ -5,17 +5,51 @@ import "./Login.css";
 function Login() {
   const navigate = useNavigate();
 
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
 
-    if (username === "admin" && password === "admin123") {
-      localStorage.setItem("isLoggedIn", "true");
-      navigate("/");
-    } else {
-      alert("Invalid username or password");
+    if (!email || !password) {
+      alert("Please enter email and password");
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      const response = await fetch(
+        "https://inventory-management-system-1-5pa5.onrender.com/api/auth/login",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email,
+            password,
+          }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (response.ok) {
+        localStorage.setItem("isLoggedIn", "true");
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("user", JSON.stringify(data.user));
+
+        navigate("/");
+      } else {
+        alert(data.message || "Invalid email or password");
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      alert("Server se connection nahi ho raha.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -25,17 +59,17 @@ function Login() {
         <div className="login-icon">📦</div>
 
         <h1>Inventory Management</h1>
-        <p>Admin Login</p>
+        <p>Login to your account</p>
 
         <form onSubmit={handleLogin}>
           <div className="login-group">
-            <label>Username</label>
+            <label>Email</label>
 
             <input
-              type="text"
-              placeholder="Enter username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              type="email"
+              placeholder="Enter email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               required
             />
           </div>
@@ -52,10 +86,28 @@ function Login() {
             />
           </div>
 
-          <button type="submit" className="login-button">
-            Login
+          <button type="submit" className="login-button" disabled={loading}>
+            {loading ? "Logging in..." : "Login"}
           </button>
         </form>
+
+        <p style={{ marginTop: "16px" }}>
+          Don't have an account?{" "}
+          <button
+            type="button"
+            onClick={() => navigate("/register")}
+            style={{
+              border: "none",
+              background: "none",
+              cursor: "pointer",
+              fontWeight: "bold",
+              padding: 0,
+              color: "#6366f1",
+            }}
+          >
+            Register
+          </button>
+        </p>
       </div>
     </div>
   );

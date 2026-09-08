@@ -571,3 +571,35 @@ button {
     min-width: 65px;
   }
 }
+/* =========================
+   INPUT TEXT VISIBILITY
+========================= */
+
+input,
+textarea,
+select {
+  color: #25293a !important;
+  background-color: #ffffff !important;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #9ca3af !important;
+  opacity: 1;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  color: #25293a !important;
+}
+/* Date picker calendar icon */
+input[type="date"] {
+  color: #25293a !important;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  opacity: 1;
+  filter: invert(20%);
+  cursor: pointer;
+}

@@ -10,18 +10,38 @@ function StockOut() {
   const [quantity, setQuantity] = useState("");
   const [date, setDate] = useState("");
   const [reason, setReason] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  // GET PRODUCTS
+  const API_URL = "https://inventory-management-system-1-5pa5.onrender.com";
+
+  // GET PRODUCTS FOR LOGGED-IN USER
   useEffect(() => {
-    fetch("https://inventory-management-system-1-5pa5.onrender.com/api/products")
-      .then((response) => response.json())
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      navigate("/login");
+      return;
+    }
+
+    fetch(`${API_URL}/api/products`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Failed to fetch products");
+        }
+
+        return response.json();
+      })
       .then((data) => {
         setProducts(data);
       })
       .catch((error) => {
         console.error("Error fetching products:", error);
       });
-  }, []);
+  }, [navigate]);
 
   // STOCK OUT
   const handleSubmit = async (e) => {
@@ -37,18 +57,34 @@ function StockOut() {
       return;
     }
 
+    if (!date) {
+      alert("Please select a date");
+      return;
+    }
+
     if (!reason) {
       alert("Please select a reason");
       return;
     }
 
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      alert("Please login again.");
+      navigate("/login");
+      return;
+    }
+
     try {
+      setLoading(true);
+
       const response = await fetch(
-        `https://inventory-management-system-1-5pa5.onrender.com/api/products/${selectedProduct}/stock-out`,
+        `${API_URL}/api/products/${selectedProduct}/stock-out`,
         {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
             quantity: Number(quantity),
@@ -75,6 +111,8 @@ function StockOut() {
     } catch (error) {
       console.error("Error removing stock:", error);
       alert("Server se connection nahi ho raha.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -150,13 +188,17 @@ function StockOut() {
             <button
               type="button"
               className="cancel-btn"
-              onClick={() => navigate("/")}
+              onClick={() => navigate("/products")}
             >
               Cancel
             </button>
 
-            <button type="submit" className="stock-out-btn">
-              Remove Stock
+            <button
+              type="submit"
+              className="stock-out-btn"
+              disabled={loading}
+            >
+              {loading ? "Removing..." : "Remove Stock"}
             </button>
           </div>
         </form>

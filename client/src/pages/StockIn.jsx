@@ -9,18 +9,38 @@ function StockIn() {
   const [selectedProduct, setSelectedProduct] = useState("");
   const [quantity, setQuantity] = useState("");
   const [date, setDate] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  // GET PRODUCTS
+  const API_URL = "https://inventory-management-system-1-5pa5.onrender.com";
+
+  // GET PRODUCTS FOR LOGGED-IN USER
   useEffect(() => {
-    fetch("https://inventory-management-system-1-5pa5.onrender.com/api/products")
-      .then((response) => response.json())
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      navigate("/login");
+      return;
+    }
+
+    fetch(`${API_URL}/api/products`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Failed to fetch products");
+        }
+
+        return response.json();
+      })
       .then((data) => {
         setProducts(data);
       })
       .catch((error) => {
         console.error("Error fetching products:", error);
       });
-  }, []);
+  }, [navigate]);
 
   // ADD STOCK
   const handleSubmit = async (e) => {
@@ -36,13 +56,29 @@ function StockIn() {
       return;
     }
 
+    if (!date) {
+      alert("Please select a date");
+      return;
+    }
+
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      alert("Please login again.");
+      navigate("/login");
+      return;
+    }
+
     try {
+      setLoading(true);
+
       const response = await fetch(
-        `https://inventory-management-system-1-5pa5.onrender.com/api/products/${selectedProduct}/stock-in`,
+        `${API_URL}/api/products/${selectedProduct}/stock-in`,
         {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
             quantity: Number(quantity),
@@ -67,6 +103,8 @@ function StockIn() {
     } catch (error) {
       console.error("Error adding stock:", error);
       alert("Server se connection nahi ho raha.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -91,7 +129,8 @@ function StockIn() {
 
               {products.map((product) => (
                 <option key={product._id} value={product._id}>
-                  {product.productName} ({product.productId})
+                  {product.productName} ({product.productId}) - Stock:{" "}
+                  {product.quantity}
                 </option>
               ))}
             </select>
@@ -125,13 +164,17 @@ function StockIn() {
             <button
               type="button"
               className="cancel-btn"
-              onClick={() => navigate("/")}
+              onClick={() => navigate("/products")}
             >
               Cancel
             </button>
 
-            <button type="submit" className="stock-in-btn">
-              Add Stock
+            <button
+              type="submit"
+              className="stock-in-btn"
+              disabled={loading}
+            >
+              {loading ? "Adding..." : "Add Stock"}
             </button>
           </div>
         </form>

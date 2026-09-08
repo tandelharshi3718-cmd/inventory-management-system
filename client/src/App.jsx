@@ -14,6 +14,8 @@ import StockOut from "./pages/StockOut";
 import Reports from "./pages/Reports";
 import Login from "./pages/Login";
 import Layout from "./Layout";
+import Register from "./pages/Register";
+import Supplier from "./pages/Supplier";
 
 import "./App.css";
 
@@ -22,31 +24,63 @@ function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [transactions, setTransactions] = useState([]);
 
-// Get products from MongoDB
-useEffect(() => {
-  fetch("https://inventory-management-system-1-5pa5.onrender.com/api/products")
-    .then((response) => response.json())
-    .then((data) => {
-      setProducts(data);
-      setLoading(false);
-    })
-    .catch((error) => {
-      console.error("Error fetching products:", error);
-      setLoading(false);
-    });
-}, []);
+  const API_URL = "https://inventory-management-system-1-5pa5.onrender.com";
+  const token = localStorage.getItem("token");
 
-// Get transactions from MongoDB
-useEffect(() => {
-  fetch("https://inventory-management-system-1-5pa5.onrender.com/api/transactions")
-    .then((response) => response.json())
-    .then((data) => {
-      setTransactions(data);
+  // Get products for logged-in user
+  useEffect(() => {
+    if (!token) {
+      setLoading(false);
+      return;
+    }
+
+    fetch(`${API_URL}/api/products`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     })
-    .catch((error) => {
-      console.error("Error fetching transactions:", error);
-    });
-}, []);
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Failed to fetch products");
+        }
+
+        return response.json();
+      })
+      .then((data) => {
+        setProducts(data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching products:", error);
+        setLoading(false);
+      });
+  }, [token]);
+
+  // Get transactions
+  useEffect(() => {
+    if (!token) {
+      return;
+    }
+
+    fetch(`${API_URL}/api/transactions`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Failed to fetch transactions");
+        }
+
+        return response.json();
+      })
+      .then((data) => {
+        setTransactions(data);
+      })
+      .catch((error) => {
+        console.error("Error fetching transactions:", error);
+      });
+  }, [token]);
 
   // Statistics
   const totalProducts = products.length;
@@ -66,6 +100,9 @@ useEffect(() => {
   // Recent Products
   const recentProducts = products.slice(-3).reverse();
 
+  // Current user
+  const userData = JSON.parse(localStorage.getItem("user") || "null");
+
   return (
     <>
       {/* Topbar */}
@@ -76,11 +113,15 @@ useEffect(() => {
         </div>
 
         <div className="admin">
-          <div className="admin-icon">A</div>
+          <div className="admin-icon">
+            {userData?.ownerName
+              ? userData.ownerName.charAt(0).toUpperCase()
+              : "U"}
+          </div>
 
           <div>
-            <strong>Admin</strong>
-            <span>Administrator</span>
+            <strong>{userData?.shopName || "Shop Owner"}</strong>
+            <span>{userData?.ownerName || "User"}</span>
           </div>
         </div>
       </header>
@@ -229,6 +270,9 @@ function App() {
         {/* Login */}
         <Route path="/login" element={<Login />} />
 
+        {/* Register */}
+        <Route path="/register" element={<Register />} />
+
         {/* Protected Layout */}
         <Route
           element={
@@ -243,6 +287,7 @@ function App() {
           <Route path="/stock-in" element={<StockIn />} />
           <Route path="/stock-out" element={<StockOut />} />
           <Route path="/reports" element={<Reports />} />
+          <Route path="/supplier" element={<Supplier />} />
         </Route>
 
       </Routes>

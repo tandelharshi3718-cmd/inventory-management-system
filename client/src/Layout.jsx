@@ -28,6 +28,12 @@ function Layout() {
                     >
                         Products
                     </Link>
+                    <Link
+                        to="/supplier"
+                        className={location.pathname === "/supplier" ? "active" : ""}
+                    >
+                        Suppliers
+                    </Link>
 
                     <Link
                         to="/stock-in"
